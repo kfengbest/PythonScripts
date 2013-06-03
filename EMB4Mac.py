@@ -3,10 +3,16 @@ import os.path
 import sys
 import shutil
 
+# Change before integration:
 embPreviousName = "May_30_2013"
 embTargetName = "May_31_2013"
+# Change above before integration
+
 embPreviousRootPath = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/" + embPreviousName + "/"
 embRootPath = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/" + embTargetName + "/"
+
+embSrc = "/Users/fengka/Documents/Src/Materials/"
+embProject = "/Users/fengka/Documents/Src/Materials/source/Solutions"
 
 srcIncludePath = "/Users/fengka/Documents/Src/Materials/include"
 srcPathDebug = "/Users/fengka/Documents/Src/Materials/Toolkit/binary/bin/osx_clang_4.0/x64/Debug/"
@@ -19,7 +25,7 @@ destPathFrameworkRelease = embRootPath + "MAC64/Frameworks/Release/EMB.framework
 destPathBinaryDebug = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Debug/"
 destPathBinaryRelease = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Release/"
 
-embSrc = "/Users/fengka/Documents/Src/Materials/"
+
 
 def SyncCode() :
 	print "Pulling source code"
@@ -29,8 +35,12 @@ def SyncCode() :
 
 def BuildCode() :
 
-	print "build debug."
-	print "build release."
+	print "building debug."
+	os.chdir(embProject)
+	os.system("xcodebuild -target \"AdExMatSample\" -project ExMaterials.xcodeproj -configuration Debug") 
+
+	print "building release."
+	os.system("xcodebuild -target \"AdExMatSample\" -project ExMaterials.xcodeproj -configuration Release") 
 
 
 def CopyFiles() :
