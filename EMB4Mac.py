@@ -143,7 +143,7 @@ def CopyFiles() :
 
 def ArchiveFiles() :
 	print "Starting to archiving..."
-	cmd7z= "/Users/fengka/Documents/Src/NeutronP4/Neutron/main/src/Build/Mac/Tools/7zip/7za a -r /Users/fengka/Mac64.7z {0}".format(embRootPath + "MAC64/*")
+	cmd7z= "/Users/fengka/Documents/Src/NeutronP4/Neutron/main/src/Build/Mac/Tools/7zip/7za a -r /Users/fengka/MAC64.7z {0}".format(embRootPath + "MAC64/*")
 	os.system(cmd7z);
 	print "Archive finished."
 
