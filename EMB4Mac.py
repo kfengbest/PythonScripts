@@ -3,6 +3,9 @@ import os.path
 import sys
 import shutil
 
+from contextlib import contextmanager
+import subprocess
+
 # Change before integration:
 embPreviousName = "May_30_2013"
 embTargetName = "May_31_2013"
@@ -13,6 +16,8 @@ embRootPath = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/" + embTarge
 
 embSrc = "/Users/fengka/Documents/Src/Materials/"
 embProject = "/Users/fengka/Documents/Src/Materials/source/Solutions"
+
+embAutoCopy = "//eptbuild/epstore/3rdParties/AutoCopy/Neutron/EMB"
 
 srcIncludePath = "/Users/fengka/Documents/Src/Materials/include"
 srcPathDebug = "/Users/fengka/Documents/Src/Materials/Toolkit/binary/bin/osx_clang_4.0/x64/Debug/"
@@ -25,6 +30,7 @@ destPathFrameworkRelease = embRootPath + "MAC64/Frameworks/Release/EMB.framework
 destPathBinaryDebug = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Debug/"
 destPathBinaryRelease = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Release/"
 
+curWDir = os.getcwd()
 
 
 def SyncCode() :
@@ -143,12 +149,35 @@ def CopyFiles() :
 
 def ArchiveFiles() :
 	print "Starting to archiving..."
-	cmd7z= "/Users/fengka/Documents/Src/NeutronP4/Neutron/main/src/Build/Mac/Tools/7zip/7za a -r /Users/fengka/MAC64.7z {0}".format(embRootPath + "MAC64/*")
+	cmd7z= "/Users/fengka/Documents/Src/NeutronP4/Neutron/main/src/Build/Mac/Tools/7zip/7za a -r {0} {1}".format(os.path.join(curWDir,"MAC64.7z"), os.path.join(embRootPath,"MAC64/*"))
+
 	os.system(cmd7z);
 	print "Archive finished."
 
+
+@contextmanager
+def mounted(remote_dir, local_dir):
+    local_dir = os.path.abspath(local_dir)
+    retcode = subprocess.call(["/sbin/mount", "-t", "smbfs", remote_dir, local_dir])
+    if retcode != 0:
+        raise OSError("mount operation failed")
+    try:
+        yield
+    finally:
+        retcode = subprocess.call(["/sbin/umount", local_dir])
+        if retcode != 0:
+            raise OSError("umount operation failed")
+
+
+
 def UploadToServer():
 	print "start uploading..."
+	newEMBFolder = os.path.join(embAutoCopy,embTargetName)
+	
+#	if not os.path.exists(newEMBFolder):
+#		os.mkdir(newEMBFolder) 
+
+	os.system("rsync {0} rsync:".format(os.path.join(curWDir,"MAC64.7z"),os.path.join(newEMBFolder,"MAC64.7z")))
 	print "Upload finished."
 
 
