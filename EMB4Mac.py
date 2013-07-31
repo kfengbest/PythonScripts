@@ -5,29 +5,34 @@ import shutil
 
 import subprocess
 
+# TODO: Must be changed every time before do a new integration
 # Change before integration:
 embPreviousName = "July_26_2013"
 embTargetName = "July_27_2013"
 # Change above before integration
 
-embPreviousRootPath = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/" + embPreviousName + "/"
-embRootPath = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/" + embTargetName + "/"
-
+# TODO: Define this variable in your Mac OS system:
 embSrc = "/Users/fengka/Documents/Src/Materials/"
-embProject = "/Users/fengka/Documents/Src/Materials/source/Solutions"
+emb3P = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/"
+embAutoCopy = "//eptbuild/epstore/3rdParties/AutoCopy/Neutron/EMB/"
+zip7Path = "/Users/fengka/Documents/Src/NeutronP4/Neutron/main/src/Build/Mac/Tools/7zip/7za"
+# Define this variable in your Mac OS system:
 
-embAutoCopy = "//eptbuild/epstore/3rdParties/AutoCopy/Neutron/EMB"
 
-srcIncludePath = "/Users/fengka/Documents/Src/Materials/include"
-srcPathDebug = "/Users/fengka/Documents/Src/Materials/Toolkit/binary/bin/osx_clang_4.0/x64/Debug/"
-srcPathRelease = "/Users/fengka/Documents/Src/Materials/Toolkit/binary/bin/osx_clang_4.0/x64/Release/"
+embPreviousRootPath = os.path.join(emb3P,embPreviousName)
+embRootPath = os.path.join(emb3P,embTargetName)
 
-destIncludePath = embRootPath + "Mac64/include"
-destPathFrameworkDebug = embRootPath + "MAC64/Frameworks/Debug/EMB.framework/"
-destPathFrameworkRelease = embRootPath + "MAC64/Frameworks/Release/EMB.framework/"
+embProject = os.path.join(embSrc, "source/Solutions")
+srcIncludePath = os.path.join(embSrc, "include")
+srcPathDebug = os.path.join(embSrc, "Toolkit/binary/bin/osx_clang_4.0/x64/Debug/")
+srcPathRelease = os.path.join(embSrc, "Toolkit/binary/bin/osx_clang_4.0/x64/Release/")
 
-destPathBinaryDebug = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Debug/"
-destPathBinaryRelease = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Release/"
+destIncludePath = os.path.join(embRootPath,"Mac64/include")
+destPathFrameworkDebug = os.path.join(embRootPath,"MAC64/Frameworks/Debug/EMB.framework/")
+destPathFrameworkRelease = os.path.join(embRootPath,"MAC64/Frameworks/Release/EMB.framework/")
+
+destPathBinaryDebug = os.path.join(embRootPath,"MAC64/binary/bin/osx_clang_4.0/x64/Debug/")
+destPathBinaryRelease = os.path.join(embRootPath,"MAC64/binary/bin/osx_clang_4.0/x64/Release/")
 
 curWDir = os.getcwd()
 
@@ -71,7 +76,6 @@ def CopyFiles() :
 
 	if os.path.exists(embRootPath) == False :
 		shutil.copytree(embPreviousRootPath, embRootPath)
-
 
 	# Copy include folder:
 	if os.path.exists(destIncludePath):
@@ -162,7 +166,7 @@ def CopyFiles() :
 
 def ArchiveFiles() :
 	print "Starting to archiving..."
-	cmd7z= "/Users/fengka/Documents/Src/NeutronP4/Neutron/main/src/Build/Mac/Tools/7zip/7za a -r {0} {1}".format(os.path.join(curWDir,"MAC64.7z"), os.path.join(embRootPath,"MAC64/*"))
+	cmd7z= "{0} a -r {1} {2}".format(zip7Path, os.path.join(curWDir,"MAC64.7z"), os.path.join(embRootPath,"MAC64/*"))
 
 	os.system(cmd7z);
 	print "Archive finished."
