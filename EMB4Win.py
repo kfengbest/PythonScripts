@@ -4,23 +4,27 @@ import sys
 import shutil
 
 # Change before integration:
-embPreviousName = "July_09_2013"
-embTargetName = "July_27_2013"
+embPreviousName = "July_26_2013"
+embTargetName = "July_31_2013"
 # Change above before integration
 
-embPreviousRootPath = os.path.join("D:\\Code\\Neutron\\3P\\EMB",embPreviousName)
-embRootPath = os.path.join("D:\\Code\\Neutron\\3P\\EMB",embTargetName)
-
+# Define this for yourself:
 embSrc = "C:\\Code\\Materials\\Materials"
-embProject = "C:\\Code\\Materials\\Materials\\source\\Solutions"
-embOutput = "C:\\"
+emb3P = "D:\\Code\\Neutron\\3P\\EMB"
 embAutoCopy = "\\\\eptbuild\\epstore\\3rdParties\\AutoCopy\\Neutron\\EMB"
+zip7Path = "D:\\Code\\Neutron\\main\\src\\Build\\Windows\\Tools\\7zip\\7z.exe"
+# Define this for yourself:
 
-srcIncludePath = "C:\\Code\\Materials\\Materials\\include"
-srcPathBinaryDebug = "C:\\Code\\Materials\\Materials\\Toolkit\\binary\\bin\\win_vc10\\x64\\Debug"
-srcPathBinaryRelease = "C:\\Code\\Materials\\Materials\\Toolkit\\binary\\bin\\win_vc10\\x64\\Release"
-srcPathLibDebug = "C:\\Code\\Materials\\Materials\\Toolkit\\binary\\lib\\ExchangeMaterials\\win_vc10\\x64\\Debug"
-srcPathLibRelease = "C:\\Code\\Materials\\Materials\\Toolkit\\binary\\lib\\ExchangeMaterials\\win_vc10\\x64\\Release"
+
+embPreviousRootPath = os.path.join(emb3P,embPreviousName)
+embRootPath = os.path.join(emb3P,embTargetName)
+embProject = os.path.join(embSrc,"source\\Solutions")
+
+srcIncludePath = os.path.join(embSrc,"include")
+srcPathBinaryDebug = os.path.join(embSrc,"Toolkit\\binary\\bin\\win_vc10\\x64\\Debug")
+srcPathBinaryRelease = os.path.join(embSrc,"Toolkit\\binary\\bin\\win_vc10\\x64\\Release")
+srcPathLibDebug = os.path.join(embSrc,"Toolkit\\binary\\lib\\ExchangeMaterials\\win_vc10\\x64\\Debug")
+srcPathLibRelease = os.path.join(embSrc,"Toolkit\\binary\\lib\\ExchangeMaterials\\win_vc10\\x64\\Release")
 
 destIncludePath = os.path.join(embRootPath,"WIN64\\include")
 destPathBinaryDebug = os.path.join(embRootPath,"WIN64\\binary\\bin\\win_vc10\\x64\\Debug")
@@ -136,7 +140,7 @@ def CopyFiles() :
 
 def ArchiveFiles() :
 	print ("Starting to archiving...")
-	cmd7z= "D:\\Code\\Neutron\\main\\src\\Build\\Windows\\Tools\\7zip\\7z.exe a -r {0} {1}".format(os.path.join(curWDir,"WIN64.7z"),os.path.join(embRootPath,"WIN64\\*"))
+	cmd7z= "{0} a -r {1} {2}".format(zip7Path, os.path.join(curWDir,"WIN64.7z"),os.path.join(embRootPath,"WIN64\\*"))
 	os.system(cmd7z);
 	print ("Archive finished.")
 
@@ -166,5 +170,5 @@ CopyFiles()
 ArchiveFiles()
 
 # Step 5: Upload to //eptbuild/eptstore/thirdparties/autocopy
-UploadToServer()
+#UploadToServer()
 
