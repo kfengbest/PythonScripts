@@ -4,8 +4,8 @@ import sys
 import shutil
 
 # Change before integration:
-embPreviousName = "May_30_2013"
-embTargetName = "May_31_2013"
+embPreviousName = "July_09_2013"
+embTargetName = "July_27_2013"
 # Change above before integration
 
 embPreviousRootPath = os.path.join("D:\\Code\\Neutron\\3P\\EMB",embPreviousName)
@@ -30,6 +30,20 @@ destPathLibRelease = os.path.join(embRootPath,"WIN64\\binary\\lib\\ExchangeMater
 
 curWDir = os.getcwd()
 
+def CleanDir( Dir ):
+    if os.path.isdir( Dir ):
+        paths = os.listdir( Dir )
+        for path in paths:
+            filePath = os.path.join( Dir, path )
+            if os.path.isfile( filePath ):
+                try:
+                    os.remove( filePath )
+                except os.error:
+                    autoRun.exception( "remove %s error." %filePath )
+            elif os.path.isdir( filePath ):
+                shutil.rmtree(filePath,True)
+    return True
+	
 def SyncCode() :
 	print ("Pulling source code")
 	os.chdir(embSrc)
@@ -37,7 +51,10 @@ def SyncCode() :
 	print ("Pull code finished.")
 
 def BuildCode() :
-
+	print("Clean Toolkit folder")
+	os.chdir(embSrc)
+	CleanDir(os.path.join(embSrc, "Toolkit"))
+	
 	print ("building debug.")
 	os.chdir(curWDir)
 	os.system( "cmd /k EMBBuild.bat {0}".format(os.path.join(embProject,"ExMaterials.sln")))
@@ -137,7 +154,7 @@ def UploadToServer():
 
 
 # Step 1: Sync code from git.
-# SyncCode()
+SyncCode()
 
 # Step 2: Build code. Debug/Release
 BuildCode()
