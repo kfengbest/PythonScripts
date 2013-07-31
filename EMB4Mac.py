@@ -3,12 +3,11 @@ import os.path
 import sys
 import shutil
 
-from contextlib import contextmanager
 import subprocess
 
 # Change before integration:
-embPreviousName = "May_30_2013"
-embTargetName = "May_31_2013"
+embPreviousName = "July_26_2013"
+embTargetName = "July_27_2013"
 # Change above before integration
 
 embPreviousRootPath = "/Users/fengka/Documents/Src/NeutronP4/Neutron/3p/EMB/" + embPreviousName + "/"
@@ -33,6 +32,21 @@ destPathBinaryRelease = embRootPath + "MAC64/binary/bin/osx_clang_4.0/x64/Releas
 curWDir = os.getcwd()
 
 
+def CleanDir( Dir ):
+    if os.path.isdir( Dir ):
+        paths = os.listdir( Dir )
+        for path in paths:
+            filePath = os.path.join( Dir, path )
+            if os.path.isfile( filePath ):
+                try:
+                    os.remove( filePath )
+                except os.error:
+                    autoRun.exception( "remove %s error." %filePath )
+            elif os.path.isdir( filePath ):
+                shutil.rmtree(filePath,True)
+    return True
+
+
 def SyncCode() :
 	print "Pulling source code"
 	os.chdir(embSrc)
@@ -40,6 +54,9 @@ def SyncCode() :
 	print "Pull code finished."
 
 def BuildCode() :
+	print "Clean Toolkit folder"
+	os.chdir(embSrc)
+	CleanDir(os.path.join(embSrc, "Toolkit"))
 
 	print "building debug."
 	os.chdir(embProject)
@@ -67,7 +84,6 @@ def CopyFiles() :
 	shutil.copy(os.path.join(srcPathDebug,"libAdExDbClient.dylib"), 		os.path.join(destPathFrameworkDebug,"libAdExDbClient.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libAdExLog.dylib"), 				os.path.join(destPathFrameworkDebug,"libAdExLog.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libAdExMatUtil.a"), 				os.path.join(destPathFrameworkDebug,"libAdExMatUtil.a"))
-	shutil.copy(os.path.join(srcPathDebug,"libcJSON.dylib"), 				os.path.join(destPathFrameworkDebug,"libcJSON.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libExDbCommon.dylib"), 			os.path.join(destPathFrameworkDebug,"libExDbCommon.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libExMatToolkit.dylib"), 		os.path.join(destPathFrameworkDebug,"libExMatToolkit.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"liblog4cplus-1.0.4UD.dylib"), 	os.path.join(destPathFrameworkDebug,"liblog4cplus-1.0.4UD.dylib"))
@@ -98,7 +114,6 @@ def CopyFiles() :
 	shutil.copy(os.path.join(srcPathRelease,"libAdExDbClient.dylib"), 		os.path.join(destPathFrameworkRelease,"libAdExDbClient.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libAdExLog.dylib"), 			os.path.join(destPathFrameworkRelease,"libAdExLog.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libAdExMatUtil.a"), 			os.path.join(destPathFrameworkRelease,"libAdExMatUtil.a"))
-	shutil.copy(os.path.join(srcPathRelease,"libcJSON.dylib"), 				os.path.join(destPathFrameworkRelease,"libcJSON.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libExDbCommon.dylib"), 		os.path.join(destPathFrameworkRelease,"libExDbCommon.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libExMatToolkit.dylib"), 		os.path.join(destPathFrameworkRelease,"libExMatToolkit.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"liblog4cplus-1.0.4UD.dylib"), 	os.path.join(destPathFrameworkRelease,"liblog4cplus-1.0.4UD.dylib"))
@@ -110,7 +125,6 @@ def CopyFiles() :
 	shutil.copy(os.path.join(srcPathDebug,"libAdExDbClient.dylib"), 		os.path.join(destPathBinaryDebug,"libAdExDbClient.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libAdExLog.dylib"), 				os.path.join(destPathBinaryDebug,"libAdExLog.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libAdExMatUtil.a"), 				os.path.join(destPathBinaryDebug,"libAdExMatUtil.a"))
-	shutil.copy(os.path.join(srcPathDebug,"libcJSON.dylib"), 				os.path.join(destPathBinaryDebug,"libcJSON.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libExDbCommon.dylib"), 			os.path.join(destPathBinaryDebug,"libExDbCommon.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"libExMatToolkit.dylib"), 		os.path.join(destPathBinaryDebug,"libExMatToolkit.dylib"))
 	shutil.copy(os.path.join(srcPathDebug,"liblog4cplus-1.0.4UD.dylib"), 	os.path.join(destPathBinaryDebug,"liblog4cplus-1.0.4UD.dylib"))
@@ -139,7 +153,6 @@ def CopyFiles() :
 	shutil.copy(os.path.join(srcPathRelease,"libAdExDbClient.dylib"), 		os.path.join(destPathBinaryRelease,"libAdExDbClient.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libAdExLog.dylib"), 			os.path.join(destPathBinaryRelease,"libAdExLog.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libAdExMatUtil.a"), 			os.path.join(destPathBinaryRelease,"libAdExMatUtil.a"))
-	shutil.copy(os.path.join(srcPathRelease,"libcJSON.dylib"), 				os.path.join(destPathBinaryRelease,"libcJSON.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libExDbCommon.dylib"), 		os.path.join(destPathBinaryRelease,"libExDbCommon.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"libExMatToolkit.dylib"), 		os.path.join(destPathBinaryRelease,"libExMatToolkit.dylib"))
 	shutil.copy(os.path.join(srcPathRelease,"liblog4cplus-1.0.4UD.dylib"), 	os.path.join(destPathBinaryRelease,"liblog4cplus-1.0.4UD.dylib"))
@@ -155,36 +168,22 @@ def ArchiveFiles() :
 	print "Archive finished."
 
 
-@contextmanager
-def mounted(remote_dir, local_dir):
-    local_dir = os.path.abspath(local_dir)
-    retcode = subprocess.call(["/sbin/mount", "-t", "smbfs", remote_dir, local_dir])
-    if retcode != 0:
-        raise OSError("mount operation failed")
-    try:
-        yield
-    finally:
-        retcode = subprocess.call(["/sbin/umount", local_dir])
-        if retcode != 0:
-            raise OSError("umount operation failed")
-
-
-
 def UploadToServer():
 	print "start uploading..."
 	newEMBFolder = os.path.join(embAutoCopy,embTargetName)
 	
-#	if not os.path.exists(newEMBFolder):
-#		os.mkdir(newEMBFolder) 
+	print os.path.join(curWDir,"MAC64.7z")
+	print newEMBFolder
+	print "rsync {0} rsync:{1}".format(os.path.join(curWDir,"MAC64.7z"),newEMBFolder)
 
-	os.system("rsync {0} rsync:".format(os.path.join(curWDir,"MAC64.7z"),os.path.join(newEMBFolder,"MAC64.7z")))
+	os.system("rsync {0} rsync:{1}".format(os.path.join(curWDir,"MAC64.7z"),newEMBFolder))
 	print "Upload finished."
 
 
 
 
 # Step 1: Sync code from git.
-# SyncCode()
+SyncCode()
 
 # Step 2: Build code. Debug/Release
 BuildCode()

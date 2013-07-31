@@ -8,15 +8,21 @@ import boto
 import sys, os
 from boto.s3.key import Key
 
-BUCKET_NAME = "kavensembbucket"
-AWS_ACCESS_KEY_ID = "AKIAJK6U5OTJIXSFXOMQ"
-AWS_SECRET_ACCESS_KEY = "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"
+BUCKET_NAME = "fusion360src4ops"
+AWS_ACCESS_KEY_ID = ""
+AWS_SECRET_ACCESS_KEY = ""
 
-targetName = 'emb2.zip'
-srcFile = '/Users/fengka/emb.zip'
 
+subFolderInBucket = "emb"  # /fusion or /emb etc
+targetName = 'emb.zip'
+localFile = '/Users/fengka/emb.zip'
 
 def push_to_s3():
+
+	if not os.path.exists(localFile):
+		print "File not found: " + localFile;
+		return
+
 	try:
 		# connect to the bucket
 		conn = boto.connect_s3(AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY)
@@ -24,12 +30,12 @@ def push_to_s3():
 
 		# create a key to keep track of our file in the storage
 		k = Key(bucket)
-		k.key = targetName
-		k.set_contents_from_filename(srcFile)
+		k.key = subFolderInBucket + "/" + targetName
+		k.set_contents_from_filename(localFile)
 
 		# we need to make it public so it can be accessed publicly
 		# using a URL like http://s3.amazonaws.com/bucket_name/key
-		k.make_public()
+		#k.make_public()
 
 		print "Uploaded success."
 
